@@ -3,9 +3,9 @@ import { generateMonthCalendarDays, today,isTheSameDay } from "./date.js";
 const calendarTemplateElement= document.querySelector("[data-template='month-calendar']");
 const calendarDayTemplateElement=document.querySelector("[data-template='month-calendar-day']");
 const calendarWeekClasses={
-    4:"four-week",
-    5:"five-week",
-    6:"six-week"
+    4:"month-calendar--four-week",
+    5:"month-calendar--five-week",
+    6:"month-calendar--six-week"
 }
 
 export function initMonthCalendar(parent, selectedDate, eventData){
@@ -14,7 +14,7 @@ export function initMonthCalendar(parent, selectedDate, eventData){
     const calendarDayListElement= calendarElement.querySelector("[data-month-calendar-day-list]");
     
     const calendarDays=generateMonthCalendarDays(selectedDate);
-    const calendarWeeks= calendarDays /7;
+    const calendarWeeks= calendarDays.length /7;
 
     const calendarWeekClass= calendarWeekClasses[calendarWeeks];
     calendarElement.classList.add(calendarWeekClass);

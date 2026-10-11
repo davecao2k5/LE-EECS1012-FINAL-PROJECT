@@ -26,6 +26,11 @@ export function initWeekCalendar(parent, selectedDate, eventData=[]){
         initColumn(calendarColumnsElement,weekDay, eventData);
     }
     parent.appendChild(calendarElement);
+
+    // Opens the week at the start of office hours (8:00 AM) instead of midnight
+    const calendarContentInnerElement=calendarElement.querySelector(".week-calendar__content-inner");
+    const openingHourElement=calendarElement.querySelectorAll(".week-calendar__time-item")[8];
+    calendarContentInnerElement.scrollTop=openingHourElement.offsetTop;
 }
 function initDayOfWeek(parent,selectedDate,weekDay){
     const calendarDayOfWeekContent= calendarDayOfWeekTemplateElement.content.cloneNode(true);
