@@ -30,8 +30,19 @@ function populateData(){
                 patientBody.appendChild(patientRow)
         
                 // When the specified row is selected the populateForm function is called and the patients information populates the fields
+                // The patient is fetched again so the form shows changes saved after the table was loaded
+                // (otherwise saving a second time would put the old values back)
                 patientRow.addEventListener("click" , function() {
-                    populateForm(patient);
+                    fetch('/api/patientData')
+                        .then(response => response.json())
+                        .then(latestPatientData => {
+                            let latestPatient = latestPatientData[patientRow.rowIndex - 1];
+
+                            // Skips if the row was deleted while the data was loading
+                            if (latestPatient) {
+                                populateForm(latestPatient);
+                            }
+                        });
                 });
             };
         })

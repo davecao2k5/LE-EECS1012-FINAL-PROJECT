@@ -54,6 +54,11 @@ function subSaveClick() {
     let patientData;
     let rowIndex = window.selectedRowIndex;
 
+    // Nothing to save until a patient has been clicked in the table
+    if (rowIndex === null || rowIndex === undefined) {
+        return;
+    }
+
     // Gets the patientData and updates the patient at the specified index with new values
     // and returns it as a POST request
     fetch('/api/patientData')

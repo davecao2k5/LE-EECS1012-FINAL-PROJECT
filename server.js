@@ -38,6 +38,15 @@ app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
 
+// Builds a "YYYY-MM-DDTHH:mm" string (same format as the form's datetime-local input)
+// for a day counted from this week's Sunday, so the sample patients always show up on the calendar
+function thisWeekAt(daysFromSunday, time) {
+    const now = new Date();
+    const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + daysFromSunday);
+    const pad = (num) => String(num).padStart(2, "0");
+    return `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}T${time}`;
+}
+
 // patientData defined here for better global scope
 let patientData = [
     {
@@ -52,7 +61,7 @@ let patientData = [
         cardNum: "2345-6789-0123-4567",
         creditCardHolder: "MsAliceSmith",
         cvv: "783",
-        dateTime: "2025-03-12T18:00",
+        dateTime: thisWeekAt(3, "18:00"),
         appointmentType: "Filling",
         preDentist: "Dr Jackson",
         allergies: "Peanuts",
@@ -73,7 +82,7 @@ let patientData = [
         cardNum: "3456-7890-1234-5678",
         creditCardHolder: "MrBobJones",
         cvv: "435",
-        dateTime: "2025-03-15T10:00",
+        dateTime: thisWeekAt(6, "10:00"),
         appointmentType: "Emergency",
         preDentist: "Dr Williams",
         allergies: "None",
@@ -94,7 +103,7 @@ let patientData = [
         cardNum: "4567-8901-2345-6789",
         creditCardHolder: "MsCarlaGreen",
         cvv: "512",
-        dateTime: "2025-03-19T12:15",
+        dateTime: thisWeekAt(10, "12:15"),
         appointmentType: "Cleaning",
         preDentist: "Dr Blake",
         allergies: "None",
@@ -115,7 +124,7 @@ let patientData = [
         cardNum: "5678-9012-3456-7890",
         creditCardHolder: "MrDavidTaylor",
         cvv: "639",
-        dateTime: "2025-03-17T13:45",
+        dateTime: thisWeekAt(8, "13:45"),
         appointmentType: "Filling",
         preDentist: "Dr Monroe",
         allergies: "Shellfish",
@@ -136,7 +145,7 @@ let patientData = [
         cardNum: "6789-0123-4567-8901",
         creditCardHolder: "MsEveWhite",
         cvv: "781",
-        dateTime: "2025-03-18T15:00",
+        dateTime: thisWeekAt(9, "15:00"),
         appointmentType: "Emergency",
         preDentist: "Dr Sanders",
         allergies: "Dust",
@@ -157,7 +166,7 @@ let patientData = [
         cardNum: "7890-1234-5678-9012",
         creditCardHolder: "MrFrankBlack",
         cvv: "842",
-        dateTime: "2025-03-19T16:30",
+        dateTime: thisWeekAt(10, "16:30"),
         appointmentType: "Cleaning",
         preDentist: "Dr Clark",
         allergies: "None",
@@ -178,7 +187,7 @@ let patientData = [
         cardNum: "8901-2345-6789-0123",
         creditCardHolder: "MsGraceBlue",
         cvv: "293",
-        dateTime: "2025-03-20T17:00",
+        dateTime: thisWeekAt(11, "17:00"),
         appointmentType: "Filling",
         preDentist: "Dr Patel",
         allergies: "Penicillin",
@@ -199,7 +208,7 @@ let patientData = [
         cardNum: "9012-3456-7890-1234",
         creditCardHolder: "MsHelenRed",
         cvv: "716",
-        dateTime: "2025-03-21T09:15",
+        dateTime: thisWeekAt(12, "09:15"),
         appointmentType: "Emergency",
         preDentist: "Dr Martinez",
         allergies: "None",

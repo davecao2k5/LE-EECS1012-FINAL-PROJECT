@@ -71,9 +71,11 @@ function subDeleteClick() {
         warnPopup.style.display = 'none';
     };
 
-    // Shows the deleted message when the confimation is yes
+    // Deletes the patient and shows the deleted message when the confimation is yes
+    // onclick (not addEventListener) so clicking Delete again doesn't stack up extra handlers
     document.getElementById('btnCloseYes').onclick = function() {
         warnPopup.style.display = 'none';
+        deletePatient(selectedRowIndex);
         deletePopup.style.display = 'block'; 
     };
 
@@ -91,32 +93,40 @@ function subDeleteClick() {
     document.getElementById('cornerCloseDelete').onclick = function() {
         deletePopup.style.display = 'none'; 
     };
+}
 
-    // When the yes button is click on
-    document.getElementById('btnCloseYes').addEventListener('click', function() {
-        // Checks if the choosen name is not null
-        if (selectedPatientName) {
-    
-                // Remove the patient from the table
-                const table = document.getElementById('patientDataTable');
-                const rows = table.rows;
+/*
+ * deletePatient: Removes the patient from the table and from the server's patient array,
+ *                so the appointment also disappears from the calendar.
+ */
 
-                // Loops through the whole table of patients
-                // When the patient name matches cell 0 name based on row delete the patient
-                // Break is used to exit immediately after patient is found
-                for (let i = 0; i < rows.length; i++) {
-                    if (rows[i].cells[0].textContent === selectedPatientName) {
-                        table.deleteRow(i);
-                        break;
-                    }
-                }
+function deletePatient(rowIndex) {
+    // Remove the patient from the table by row (not by name, two patients can share a name)
+    document.getElementById('patientDataTable').deleteRow(rowIndex);
 
-                // Resets the global variables and form fields
-                selectedRowIndex = null;
-                selectedPatientName = "";
-                resetFormFields();
-        }
-    });
+    // Resets the global variables and form fields
+    // window.selectedRowIndex is the row patientModify would save to, so it is cleared too
+    selectedRowIndex = null;
+    selectedPatientName = "";
+    window.selectedRowIndex = null;
+    resetFormFields();
+
+    // The table is filled in the same order as the server array, so the row index is the patient index
+    fetch('/api/patientData')
+        .then(response => response.json())
+        .then(patientData => {
+            patientData.splice(rowIndex, 1);
+
+            // Sends the patient data without the deleted patient back to the server
+            return fetch('/api/savePatientData', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(patientData)
+            });
+        })
+        .catch(error => {
+            console.log('Patient was not deleted from the server', error);
+        });
 }
 
 // Waiting to click the choosen row within the table

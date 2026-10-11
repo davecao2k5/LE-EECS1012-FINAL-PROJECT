@@ -72,6 +72,9 @@
     bottom: 0;
     display: flex;
     overflow-y: auto;
+    /* Scroll the hours inside the calendar (header 90px + toolbar + day names + fixed footer 100px) */
+    max-height: calc(100vh - 300px);
+    min-height: 16rem;
 }
 .week-calendar__time-list{
     width:4.5rem;
@@ -99,6 +102,11 @@
     border-top: 1px solid #ccc;
     border-left:1px solid #ccc;
     background-color: #497d74;
+}
+/* Appointments sit in their starting hour cell: keep them inside the column and on top of the next hour */
+.week-calendar__cell .event{
+    box-sizing: border-box;
+    z-index: 1;
 }
 .week-calendar__day-of-week-button--highlight{
     border-color:#139d85;
